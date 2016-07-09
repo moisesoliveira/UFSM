@@ -1,0 +1,35 @@
+from genetic import MAXIMIZE, MINIMIZE, Individual, Environment
+
+segredo = "BOLA"
+from time import sleep
+
+class FraseGenetica(Individual):
+    frase = ''
+    alleles = range(26)
+    length = 4
+    optimization = MAXIMIZE
+    def __init__(self, cromossomo = None):
+        super(FraseGenetica, self).__init__(cromossomo)
+        self.cromossomo = self.chromosome
+        for gene in self.cromossomo:
+            cod = ord('A') + gene
+            self.frase = self.frase + chr(cod)
+    def evaluate(self, optimum=1.0):
+        global segredo
+        erro = 0
+        for i,gene in enumerate(self.cromossomo):
+            objetivo = ord(segredo[i]) - ord('A')
+            #print erro
+            erro = erro + (objetivo - gene)**2
+        self.score = 1.0 / (float(erro) + 1.0)
+        print erro
+
+    def __repr__(self):
+        sleep(0.1)
+        return self.frase
+
+e = Environment(FraseGenetica, size=20, \
+        maxgenerations=100, crossover_rate=0.9, \
+        mutation_rate=0.02)
+e.run()
+
